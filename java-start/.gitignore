@@ -27,21 +27,3 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-
-# IntelliJ
-.idea/
-*.iml
-out/
-
-# macOS
-.DS_Store
-
-# Gradle
-.gradle/
-build/
-
-# Maven
-target/
-
-# Logs
-*.log
