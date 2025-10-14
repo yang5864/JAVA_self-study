@@ -33,7 +33,7 @@ import java.io.FileInputStream;
    사용하는 클래스명이 Solution 이어야 하므로, 가급적 Solution.java 를 사용할 것을 권장합니다.
    이러한 상황에서도 동일하게 java Solution 명령으로 프로그램을 수행해볼 수 있습니다.
  */
-public class Solution_2817
+public class Solution_2805
 {
     public static void main(String args[]) throws Exception
     {
@@ -60,26 +60,71 @@ public class Solution_2817
         {
 
             /////////////////////////////////////////////////////////////////////////////////////////////
-			int N = sc.nextInt();
-            int K = sc.nextInt();
-
-            int [] num = new int[N];
+			/*
+				 이 부분에 여러분의 알고리즘 구현이 들어갑니다.
+				 int N = sc.nextInt();
+            int[] num = new int[N];
+            int[][] farm = new int[N][N];
             for (int i = 0; i < N; i++) {
                 num[i] = sc.nextInt();
             }
 
-            int[] dp = new int[K + 1];
-            dp[0] = 1; // 합 0을 만드는 방법(빈 집합) 1가지
-
             for (int i = 0; i < N; i++) {
-                int a = num[i];
-                if (a > K) continue; // 넘치는 값은 건너뜀
-                for (int s = K; s >= a; s--) {
-                    dp[s] += dp[s - a];
+                for (int j = 0; j < N; j++) {
+                    farm[i][N-j-1] = num[i] % 10;
+                    num[i] /= 10;
                 }
             }
 
-            System.out.println("#" + test_case + " " + dp[K]);
+            int sum = 0;
+            int mid = ((1 + N) / 2) - 1; //2
+            int left = mid; //2
+            int right = mid; //2
+            for (int i = 0; i < mid; i++) { //2번째 행까지
+                for (int j = left; j <= right; j++) {
+                    sum += farm[i][j];
+                }
+                left--;
+                right++;
+            }
+
+            for (int i = mid; i < N; i++) {
+                for (int j = left; j <= right; j++) {
+                    sum += farm[i][j];
+                }
+                left++;
+                right--;
+            }
+
+            System.out.println("#" + test_case + " " + sum);
+			 */
+
+            int N = sc.nextInt();
+            int[][] farm = new int[N][N];
+
+            // 각 행을 문자열로 받아 숫자 문자 -> 정수로 변환 (N 최대 49이므로 int로 읽으면 오버플로우 가능)
+            for (int i = 0; i < N; i++) {
+                String line = sc.next(); // 공백 없이 N자리
+                for (int j = 0; j < N; j++) {
+                    farm[i][j] = line.charAt(j) - '0';
+                    // 각 행을 문자열(String)로 읽고, 문자 단위로 - '0' 변환해서 farm[i][j]에 넣도록
+                }
+            }
+
+            int sum = 0;
+            int mid = N / 2;       // 중앙 인덱스 (0-based)
+            int left = mid, right = mid;
+
+            for (int i = 0; i < N; i++) {
+                for (int j = left; j <= right; j++) sum += farm[i][j];
+                if (i < mid) {      // 윗부분: 폭을 넓힘
+                    left--; right++;
+                } else {            // 중앙 이후: 폭을 줄임
+                    left++; right--;
+                }
+            }
+
+            System.out.println("#" + test_case + " " + sum);
             /////////////////////////////////////////////////////////////////////////////////////////////
 
         }
