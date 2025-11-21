@@ -26,38 +26,53 @@ package D3;
 //System.out.println(var);		       				   // 문자열 1개 출력하는 예제
 //System.out.println(AB);		       				     // long 변수 1개 출력하는 예제
 /////////////////////////////////////////////////////////////////////////////////////////////
-import java.util.Scanner;
+import java.util.*;
 
 /*
    사용하는 클래스명이 Solution 이어야 하므로, 가급적 Solution.java 를 사용할 것을 권장합니다.
    이러한 상황에서도 동일하게 java Solution 명령으로 프로그램을 수행해볼 수 있습니다.
  */
-public class Solution_2806_unsolved
+public class Solution_1244_Retry
 {
-    static int N;
+    static char[] numArr;
+    static int k;
     static int answer;
-    static boolean[] col;
-    static boolean[] diag1;
-    static boolean[] diag2;
+    static HashSet<String>[] visited;
     public static void main(String args[]) throws Exception
     {
+		/*
+		   아래의 메소드 호출은 앞으로 표준 입력(키보드) 대신 input.txt 파일로부터 읽어오겠다는 의미의 코드입니다.
+		   여러분이 작성한 코드를 테스트 할 때, 편의를 위해서 input.txt에 입력을 저장한 후,
+		   이 코드를 프로그램의 처음 부분에 추가하면 이후 입력을 수행할 때 표준 입력 대신 파일로부터 입력을 받아올 수 있습니다.
+		   따라서 테스트를 수행할 때에는 아래 주석을 지우고 이 메소드를 사용하셔도 좋습니다.
+		   단, 채점을 위해 코드를 제출하실 때에는 반드시 이 메소드를 지우거나 주석 처리 하셔야 합니다.
+		 */
+        //System.setIn(new FileInputStream("res/input.txt"));
+
+		/*
+		   표준입력 System.in 으로부터 스캐너를 만들어 데이터를 읽어옵니다.
+		 */
         Scanner sc = new Scanner(System.in);
         int T;
         T=sc.nextInt();
+		/*
+		   여러 개의 테스트 케이스가 주어지므로, 각각을 처리합니다.
+		*/
+
         for(int test_case = 1; test_case <= T; test_case++)
         {
 
             /////////////////////////////////////////////////////////////////////////////////////////////
-			/*
-				 diag1(5시 방향 대각선): 열 - 행 같으면
-				 diag(7시 방향 대각선): 행 + 열 같으면
-			 */
-            N = sc.nextInt();
+			String num = sc.next();
+            k = sc.nextInt();
+
+            numArr = num.toCharArray();
             answer = 0;
 
-            col = new boolean[N];
-            diag1 = new boolean[2 * N]; //row - col + (N - 1)
-            diag2 = new boolean[2 * N]; //row + col
+            visited = new HashSet[k+1];
+            for (int i = 0; i < k+1; i++) {
+                visited[i] = new HashSet<>();
+            }
 
             dfs(0);
 
@@ -66,29 +81,34 @@ public class Solution_2806_unsolved
 
         }
     }
-    static void dfs(int row) {
-        if (row == N) {
-            answer++;
+    static void dfs(int depth) {
+        if (depth == k) {
+            int value = Integer.parseInt(new String(numArr));
+            if (value > answer) {
+                answer = value;
+            }
             return;
         }
 
-        for (int i = 0; i < N; i++) { //i가 col임
-            int d1 = row - i  + (N - 1);
-            int d2 = row + i;
-
-            if (col[i]) continue;   //같은 열에 있으면 스킵
-            if (diag1[d1]) continue;   //같은 5시 대각선에 있으면 스킵
-            if (diag2[d2]) continue;   //같은 7시 대각선에 있으면 스킵
-
-            col[i] = true;
-            diag1[d1] = true;
-            diag2[d2] = true;
-
-            dfs(row + 1);
-
-            col[i] = false;
-            diag1[d1] = false;
-            diag2[d2] = false;
+        String state = new String(numArr);
+        if (visited[depth].contains(state)){
+            return;
         }
+        visited[depth].add(state);
+
+        int len = numArr.length;
+        for (int i = 0; i < len; i++) {
+            for (int j = i+1; j < len; j++) {
+                swap(i, j);
+                dfs(depth+1);
+                swap(i, j);
+            }
+        }
+    }
+
+    static void swap(int i, int j) {
+        char temp = numArr[i];
+        numArr[i] = numArr[j];
+        numArr[j] = temp;
     }
 }
