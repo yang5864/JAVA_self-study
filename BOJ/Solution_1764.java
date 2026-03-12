@@ -11,7 +11,6 @@ public class Solution_1764 {
 
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        int cnt = 0;
 
         HashSet<String> neverHeard = new HashSet<>();
         HashSet<String> neverSeen = new HashSet<>();
@@ -24,21 +23,16 @@ public class Solution_1764 {
             neverSeen.add(br.readLine());
         }
 
-        for (String s : neverSeen) {
-            if (neverHeard.contains(s)){
-                cnt++;
-            }
-        }
-
         neverSeen.retainAll(neverHeard);
 
         List<String> list = new ArrayList<>(neverSeen);
 
         Collections.sort(list);
 
-        System.out.println(cnt);
+        sb.append(neverSeen.size()).append("\n");
         for (String s : list) {
-            System.out.println(s);
+            sb.append(s).append("\n");
         }
+        System.out.print(sb);
     }
 }
